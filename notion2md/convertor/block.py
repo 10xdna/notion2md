@@ -260,7 +260,7 @@ def image(info: dict) -> str:
 
     if info["caption"]:
         return (
-            f"![{info['file_name']}]({info['file_path']})\n\n{info['caption']}"
+            f'{{{{% post-image src="{info["file_path"]}" alt="{info["caption"]}" title="{info["caption"]}" %}}}}'
         )
     else:
         return f"![{info['file_name']}]({info['file_path']})"
@@ -269,6 +269,13 @@ def image(info: dict) -> str:
 def file(info: dict) -> str:
     # name,file_path = downloader(info['url'])
     return f"[{info['file_name']}]({info['file_path']})"
+
+
+def video(info: dict) -> str:
+    if "youtube.com" in info['url']:
+        youtube_video_id = info['url'].split('?v=')[1].split('&')[0]
+        return f"<iframe width='1280' height='720' src='https://www.youtube-nocookie.com/embed/{youtube_video_id}' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>\n\n"
+    return ""
 
 
 def bookmark(info: dict) -> str:
@@ -330,4 +337,5 @@ BLOCK_TYPES = {
     "file": file,
     "table_row": table_row,
     "synced_block": synced_block,
+    "video": video,
 }
