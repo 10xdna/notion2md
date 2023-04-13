@@ -272,10 +272,16 @@ def file(info: dict) -> str:
 
 
 def video(info: dict) -> str:
+    content = None
     if "youtube.com" in info['url']:
         youtube_video_id = info['url'].split('?v=')[1].split('&')[0]
-        return f"<iframe width='1280' height='720' src='https://www.youtube-nocookie.com/embed/{youtube_video_id}' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>\n\n"
-    return ""
+        content = f"<iframe width='1280' height='720' src='https://www.youtube-nocookie.com/embed/{youtube_video_id}' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>\n\n"
+    if "vimeo.com" in info['url']:
+        vimeo_video_id = info['url'].split('/video/')[1].split('?')[0]
+        return f'{{{{% post-embed-vimeo id="{vimeo_video_id}" caption="{info["caption"]}" %}}}}'
+    if content and info['caption']:
+        content = f"<figure>{content}<figcaption>{info['caption']}</figcaption></figure>"
+    return content
 
 
 def bookmark(info: dict) -> str:
