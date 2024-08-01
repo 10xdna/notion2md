@@ -260,8 +260,9 @@ def image(info: dict) -> str:
     # name,file_path = downloader(info['url'])
 
     if info["caption"]:
+        caption = info["caption"].replace('\n','<br/>')
         return (
-            f'{{{{% post-image src="{info["file_path"]}" alt="{info["caption"]}" title="{info["caption"]}" %}}}}'
+            f'{{{{% post-image src="{info["file_path"]}" alt="{caption}" title="{caption}" %}}}}'
         )
     else:
         return f"![{info['file_name']}]({info['file_path']})"
