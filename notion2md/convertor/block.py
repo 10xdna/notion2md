@@ -276,10 +276,18 @@ def file(info: dict) -> str:
 def video(info: dict) -> str:
     content = None
     if "youtube.com" in info['url'] or "youtu.be" in info['url']:
-        if "youtube.com" in info['url']:
-            youtube_video_id = info['url'].split('?v=')[1].split('&')[0]
-        if "youtu.be" in info['url']:
-            youtube_video_id = info['url'].split('youtu.be/')[1].split('&')[0].split('/')[0].split('?')[0]
+        if "youtube.com" in info["url"] and "?v=" in info["url"]:
+            youtube_video_id = info["url"].split("?v=")[1].split("&")[0]
+        elif "youtube.com" in info["url"] and "/live/" in info["url"]:
+            youtube_video_id = info["url"].split("/live/")[1].split("?")[0]
+        elif "youtu.be" in info["url"]:
+            youtube_video_id = (
+                info["url"]
+                .split("youtu.be/")[1]
+                .split("&")[0]
+                .split("/")[0]
+                .split("?")[0]
+            )
         content = f"<iframe width='1280' height='720' src='https://www.youtube-nocookie.com/embed/{youtube_video_id}' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>\n\n"
     if "vimeo.com" in info['url']:
         vimeo_video_id = info['url'].split('/video/')[1].split('?')[0]
